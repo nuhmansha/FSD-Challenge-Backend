@@ -5,6 +5,7 @@ const cors = require('cors')
 
 const dbConnection =require('./config/db')
 const authRouter = require('./routes/authRoutes')
+const taskRoute = require('./routes/taskRoutes')
 
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(
 
 
 app.use('/',authRouter);
+app.use('/',taskRoute)
 
 dbConnection()
   .then(() => {
