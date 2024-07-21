@@ -114,6 +114,13 @@ module.exports = {
         family_name: lastName,
       } = ticket.getPayload();
 
+      const existingUser = await User.findOne({ email });
+      console.log(existingUser, "exist");
+
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      }
+
       const user = await handleGoogleUser(email, firstName, lastName);
 
       const token = createJWT(user.id);
@@ -140,6 +147,13 @@ module.exports = {
         given_name: firstName,
         family_name: lastName,
       } = ticket.getPayload();
+
+      const existingUser = await User.findOne({ email });
+      console.log(existingUser, "exist");
+
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      }
 
       const user = await handleGoogleUser(email, firstName, lastName);
 
