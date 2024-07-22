@@ -16,9 +16,7 @@ module.exports = {
       const { title, description, status = "todo" } = req.body;
 
       if (!title || !description) {
-        return res
-          .status(400)
-          .json({ error: "Title and description are required" });
+        return res.status(400).json({ error: "Title and description are required" });
       }
 
       const newTask = new Task({
@@ -57,6 +55,7 @@ module.exports = {
       res.status(500).json({ error: "Internal server error" });
     }
   },
+
   deleteTask: async (req, res) => {
     try {
       const { taskId } = req.params;
@@ -72,6 +71,40 @@ module.exports = {
     } catch (error) {
       console.error("Error deleting task:", error);
       res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
+  updateTask: async (req, res) => {
+    try {
+      const { taskId } = req.params;
+      const { title, description } = req.body;
+
+      const task = await Task.findById(taskId);
+
+      if (!task) {
+        return res.status(404).json({ error: "Task not found" });
+      }
+
+      if (title) task.title = title;
+      if (description) task.description = description;
+
+      await task.save();
+
+      res.json(task);
+    } catch (error) {
+      console.error("Error updating task:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+  getTaskById : async (req, res) => {
+    try {
+      const task = await Task.findById(req.params.taskId);
+      if (!task) {
+        return res.status(404).json({ message: 'Task not found' });
+      }
+      res.status(200).json(task);
+    } catch (error) {
+      res.status(500).json({ message: 'Server error' });
     }
   },
 };
