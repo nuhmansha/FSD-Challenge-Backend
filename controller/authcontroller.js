@@ -41,7 +41,7 @@ module.exports = {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      const existingUser = await User.findOne({ email });
+      const existingUser = await User.findOne({ email }).exec();
       console.log(existingUser, "Existing user");
       if (existingUser) {
         return res.status(400).json({ message: "User already exists" });
@@ -77,7 +77,7 @@ module.exports = {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email }).exec();
       console.log(user, "User found");
       if (!user) {
         return res.status(400).json({ message: "Invalid credentials" });
