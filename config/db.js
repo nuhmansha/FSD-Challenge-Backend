@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // 5 seconds timeout
     });
     console.log("Database connected successfully");
   } catch (error) {
@@ -12,4 +11,7 @@ const connectDB = async () => {
   }
 };
 
+connectDB();
+
 module.exports = connectDB;
+
