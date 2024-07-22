@@ -60,7 +60,8 @@ module.exports = {
       await newUser.save();
       console.log(newUser, "New user");
 
-      res.status(201).json({ message: "User created successfully" });
+      const token = createJWT(newUser.id);
+      res.status(201).json({ token });
     } catch (error) {
       console.error("Signup error:", error.message);
       res.status(500).json({ message: "An error occurred" });
@@ -114,13 +115,6 @@ module.exports = {
         family_name: lastName,
       } = ticket.getPayload();
 
-      const existingUser = await User.findOne({ email });
-      console.log(existingUser, "exist");
-
-      if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
-      }
-
       const user = await handleGoogleUser(email, firstName, lastName);
 
       const token = createJWT(user.id);
@@ -148,14 +142,12 @@ module.exports = {
         family_name: lastName,
       } = ticket.getPayload();
 
-      const existingUser = await User.findOne({ email });
-      console.log(existingUser, "exist");
+      let user = await User.findOne({ email });
 
-      if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+      if (!user) {
+        // If user does not exist, create a new one
+        user = await handleGoogleUser(email, firstName, lastName);
       }
-
-      const user = await handleGoogleUser(email, firstName, lastName);
 
       const token = createJWT(user.id);
       res.json({ token });
