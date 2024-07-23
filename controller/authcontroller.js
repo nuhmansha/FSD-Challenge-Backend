@@ -60,8 +60,7 @@ module.exports = {
       await newUser.save();
       console.log(newUser, "New user");
 
-      const token = createJWT(newUser.id);
-      res.status(201).json({ token });
+      
     } catch (error) {
       console.error("Signup error:", error.message);
       res.status(500).json({ message: "An error occurred" });
