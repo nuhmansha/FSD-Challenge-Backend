@@ -3,11 +3,8 @@ require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    console.log(process.env.MONGO_URI);
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    console.log('MongoDB URI:', process.env.MONGO_URI); // Log the MongoDB URI
+    await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB connected...');
   } catch (err) {
     console.error('Error connecting DB:', err);
@@ -16,5 +13,6 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
+
 
 
